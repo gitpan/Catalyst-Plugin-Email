@@ -1,9 +1,11 @@
 package Catalyst::Plugin::Email;
 
 use strict;
-require Email::Send;
+use Email::Send;
+use Email::MIME;
+use Email::MIME::Creator;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 NAME
 
@@ -12,25 +14,21 @@ Catalyst::Plugin::Email - Send emails with Catalyst
 =head1 SYNOPSIS
 
     use Catalyst 'Email';
-    use Email::Simple;
-    use Email::Simple::Creator;
 
     __PACKAGE__->config->{email} = qw/SMTP smtp.oook.de/;
 
     $c->email(
-        Email::Simple->create(
-            header => [
-                From    => 'sri@oook.de',
-                To      => 'sri@cpan.org',
-                Subject => 'Hello!'
-            ],
-            body => 'Hello sri'
-        )
+        header => [
+            From    => 'sri@oook.de',
+            To      => 'sri@cpan.org',
+            Subject => 'Hello!'
+        ],
+        body => 'Hello sri'
     );
 
 =head1 DESCRIPTION
 
-Send emails with Catalyst and C<Email::Send>.
+Send emails with Catalyst and L<Email::Send> and L<Email::MIME::Creator>.
 
 =head2 METHODS
 
@@ -39,7 +37,9 @@ Send emails with Catalyst and C<Email::Send>.
 =cut
 
 sub email {
-    my ( $c, $email ) = @_;
+    my $c = shift;
+    my $email = $_[1] ? {@_} : $_[0];
+    $email = Email::MIME::Creator->create(%$email);
     my @args = $c->config->{email};
     my $class;
     unless ( $class = shift @args ) {

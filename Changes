@@ -1,4 +1,7 @@
 Revision history for Perl extension Catalyst::Plugin::Email.
 
+0.02  Sun Jan 30 18:00:00 2005
+        - new api
+
 0.01  Fri Jan 28 22:00:00 2005
         - first release

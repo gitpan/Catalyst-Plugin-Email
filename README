@@ -3,24 +3,20 @@ NAME
 
 SYNOPSIS
         use Catalyst 'Email';
-        use Email::Simple;
-        use Email::Simple::Creator;
 
         __PACKAGE__->config->{email} = qw/SMTP smtp.oook.de/;
 
         $c->email(
-            Email::Simple->create(
-                header => [
-                    From    => 'sri@oook.de',
-                    To      => 'sri@cpan.org',
-                    Subject => 'Hello!'
-                ],
-                body => 'Hello sri'
-            )
+            header => [
+                From    => 'sri@oook.de',
+                To      => 'sri@cpan.org',
+                Subject => 'Hello!'
+            ],
+            body => 'Hello sri'
         );
 
 DESCRIPTION
-    Send emails with Catalyst and "Email::Send".
+    Send emails with Catalyst and Email::Send and Email::MIME::Creator.
 
   METHODS
    email
