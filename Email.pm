@@ -5,7 +5,7 @@ use Email::Send;
 use Email::MIME;
 use Email::MIME::Creator;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 NAME
 
@@ -15,7 +15,7 @@ Catalyst::Plugin::Email - Send emails with Catalyst
 
     use Catalyst 'Email';
 
-    __PACKAGE__->config->{email} = qw/SMTP smtp.oook.de/;
+    __PACKAGE__->config->{email} = [qw/SMTP smtp.oook.de/];
 
     $c->email(
         header => [
@@ -39,14 +39,15 @@ Send emails with Catalyst and L<Email::Send> and L<Email::MIME::Creator>.
 sub email {
     my $c = shift;
     my $email = $_[1] ? {@_} : $_[0];
-    $email = Email::MIME::Creator->create(%$email);
-    my @args = $c->config->{email};
+    $email = Email::MIME->create(%$email);
+    my $args = $c->config->{email} || [];
+    my @args = @{$args};
     my $class;
     unless ( $class = shift @args ) {
         $class = 'SMTP';
         unshift @args, 'localhost';
     }
-    Email::Send::send $class => $email, @args;
+    send $class => $email, @args;
 }
 
 =head1 SEE ALSO
