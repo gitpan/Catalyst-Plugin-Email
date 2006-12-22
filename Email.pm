@@ -6,7 +6,7 @@ use Email::MIME;
 use Email::MIME::Creator;
 use Carp qw/croak/;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 NAME
 
@@ -102,8 +102,6 @@ arrayref of Email::MIME objects.
 sub email {
     my $c = shift;
     my $email = $_[1] ? {@_} : $_[0];
-    croak "Can't send mail without recipient"
-	unless length($email->{To});
     $email = Email::MIME->create(%$email);
     my $args = $c->config->{email} || [];
     my @args = @{$args};
